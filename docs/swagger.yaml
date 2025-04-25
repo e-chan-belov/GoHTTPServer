@@ -1,0 +1,209 @@
+basePath: /
+definitions:
+  domain.ErrorMessage:
+    properties:
+      location:
+        type: string
+      message:
+        type: string
+    type: object
+  types.GetResultHandlerAnswer:
+    properties:
+      task_result:
+        type: string
+    type: object
+  types.GetStatusHandlerAnswer:
+    properties:
+      task_status:
+        type: string
+    type: object
+  types.LoginRequestAnswer:
+    properties:
+      sessionId:
+        type: string
+    type: object
+  types.PostTaskHandlerAnswer:
+    properties:
+      task_id:
+        type: string
+    type: object
+  types.PostTaskHandlerRequest:
+    properties:
+      task:
+        type: string
+    type: object
+  types.UserBodyRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server.
+  title: My API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Creates new session for given user and gets a token for that user
+      parameters:
+      - description: User request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserBodyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.LoginRequestAnswer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+      summary: Get a login token
+      tags:
+      - object
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Creates new user and session for that user and gets a token for
+        that user
+      parameters:
+      - description: User request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserBodyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.LoginRequestAnswer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+      summary: Create new user and login
+      tags:
+      - object
+  /result/{id}:
+    get:
+      consumes:
+      - text/plain
+      description: Get a task's result by its id
+      parameters:
+      - description: 'Authorization token in format: Bearer {auth_token}'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID объекта
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.GetResultHandlerAnswer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+      summary: Get a task's result
+      tags:
+      - object
+  /status/{id}:
+    get:
+      consumes:
+      - text/plain
+      description: Get a task's status by its id
+      parameters:
+      - description: 'Authorization token in format: Bearer {auth_token}'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID объекта
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.GetStatusHandlerAnswer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+      summary: Get a task's status
+      tags:
+      - object
+  /task:
+    post:
+      consumes:
+      - application/json
+      description: Create a new task with the specified request
+      parameters:
+      - description: 'Authorization token in format: Bearer {auth_token}'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.PostTaskHandlerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.PostTaskHandlerAnswer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.ErrorMessage'
+      summary: Create a task
+      tags:
+      - object
+swagger: "2.0"
