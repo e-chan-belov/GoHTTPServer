@@ -1,4 +1,4 @@
-FROM golang:1.22.3-alpine AS build
+FROM golang:1.24-alpine AS build
 
 WORKDIR /build
 
@@ -6,7 +6,7 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY . .
+COPY .. .
 
 RUN apk add --no-cache make
 
